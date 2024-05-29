@@ -3,7 +3,7 @@ import streamlit as st
 from PIL import Image
 import os
 
-# 배경(background) thmeme 적용
+# 배경(background) theme 적용
 def add_bg_from_url():
     st.markdown(
          f"""
@@ -54,12 +54,14 @@ def main():
     # title 제목
     st.markdown("<h1 style='text-align: center; color:white;'>GIF 생성 과정</h1>", unsafe_allow_html=True)
     
+    # 현재 작업 디렉토리
+    current_directory = os.path.dirname(__file__)
+    
     # 이미지 저장 경로
-    original_images_directory = r"Test_folder/frames"
-    style_image_path = r"Test_folder/Picasso-The_Weeping_Woman.jpg"
-    composite_images_directory = r"Test_folder/transferred_images" 
-    gif_path = r"Test_folder/Jay-won.gif"
-
+    original_images_directory = os.path.join(current_directory, "Test_folder/frames")
+    style_image_path = os.path.join(current_directory, "Test_folder/Picasso-The_Weeping_Woman.jpg")
+    composite_images_directory = os.path.join(current_directory, "Test_folder/transferred_images") 
+    gif_path = os.path.join(current_directory, "Test_folder/Jay-won.gif")
 
     # 사이드바 버튼을 가운데 정렬로 배열하기
     st.markdown(
@@ -95,12 +97,11 @@ def main():
             st.image([original_image_to_show, style_image_to_show], caption=["X_original", "X_style"], width=350)
             st.write("</div>", unsafe_allow_html=True)
             
-            #추가로 이미지를 설명하는 텍스트 작성
+            # 추가로 이미지를 설명하는 텍스트 작성
             st.write("<div style='text-align: center; color:white; font-size: 20px;'>이미지 합성을 하기 위해 원본 이미지와 스타일 이미지를 준비한다.</div>", unsafe_allow_html=True)
         
         else:
             st.write("디렉토리에 이미지 파일이 없습니다.")
-    
     
     if st.sidebar.button('과정 2'):
         # filenames 변수 정의
@@ -135,24 +136,23 @@ def main():
             st.image(concatenate_images(composite_images_to_show[:num_images]), caption="transferred_images", width=700)
             st.write("...")
             if len(original_images_to_show) > 10 or len(composite_images_to_show) > 10:
-              
-                
                 # 추가로 이미지를 설명하는 텍스트를 입력
                 st.write("<div style='text-align: center; color:white; font-size: 20px;'>여러 장의 합성된 사진들을 한데 모아 GIF 파일로 변환한다.</div>", unsafe_allow_html=True)
         else:
             st.write("디렉토리에 이미지 파일이 없습니다.")
         
-      
     if st.sidebar.button('과정 3'):
         # GIF 파일을 표시합니다.
         if os.path.isfile(gif_path):
             # st.columns를 사용하여 이미지를 중앙에 배치합니다.
             col1, col2, col3 = st.columns([1,6,1])  # 중앙 열에 더 큰 가중치를 부여합니다.
         
-        with col2:  # 이미지를 중앙 열에 표시합니다.
-            st.image(gif_path, caption="Jay-won.gif", width=500)
+            with col2:  # 이미지를 중앙 열에 표시합니다.
+                st.image(gif_path, caption="Jay-won.gif", width=500)
+        else:
+            st.write("GIF 파일이 없습니다.")
     else:
-        pass  # 파일이 없을 대 사용자에게 메시지를 보여주고 싶지 않을때
+        pass  # 파일이 없을 때 사용자에게 메시지를 보여주고 싶지 않을 때
 
 if __name__ == "__main__":
-    main()  
+    main()
